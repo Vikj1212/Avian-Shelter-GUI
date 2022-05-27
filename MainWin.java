@@ -272,7 +272,8 @@ public class MainWin extends JFrame{
             try(BufferedReader br = new BufferedReader(new FileReader(filename));){
                 //shelter.setFilename(filename.getAbsolutePath());
                 shelter = new Shelter(br);
-            }catch(Exception e){System.err.println("Failed to open from file: " + e);}
+            }catch(Exception e){System.err.println("Failed to open from file: " + e);
+                JOptionPane.showMessageDialog(this, "Failed to open file: " + e, "File Open Error!", JOptionPane.ERROR_MESSAGE);}
             updateDisplay(DataView.ANIMALS);
         }
     }
@@ -294,13 +295,15 @@ public class MainWin extends JFrame{
             filename = fc.getSelectedFile();
             if(!filename.getAbsolutePath().endsWith(".shelter")){
                 filename = new File(filename.getAbsolutePath() + ".shelter");
+            }
                 //BufferedWriter bw = null;
-                try{
-                    //System.out.println("[Debug]: Filename: "+ filename.getAbsolutePath());
-                    shelter.setFilename(filename.getAbsolutePath());
-                    onSaveClick(); 
-                 }catch(Exception e){System.err.println("Failed to save to file: " + e);}         
-             }
+            try{
+                //System.out.println("[Debug]: Filename: "+ filename.getAbsolutePath());
+                shelter.setFilename(filename.getAbsolutePath());
+                onSaveClick(); 
+            }catch(Exception e){System.err.println("Failed to save to file: " + e);
+                JOptionPane.showMessageDialog(this, "Faile to Save File: " + e, "Save Error!", JOptionPane.ERROR_MESSAGE);}         
+             
         }
     }
 }

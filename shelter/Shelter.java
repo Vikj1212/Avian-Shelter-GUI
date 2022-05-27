@@ -73,6 +73,16 @@ public class Shelter{
             for(Client c: clients){
                 c.save(bw);
             }
+            bw.write("" + adoptions.size() + '\n');
+            for(Animal a : adoptions.keySet()){
+                bw.write(a.family() + '\n');
+                a.save(bw);
+                int index = clients.indexOf(adoptions.get(a));
+                if(index < 0 || index > clients.size()){
+                throw new ArrayIndexOutOfBoundsException("Adoptive Client Not Registered!");
+                }
+                bw.write(index + '\n');
+            }
         }catch (Exception e){System.err.println("Failed to write shelter data to file: " + e);}
         bw.close();
     }
