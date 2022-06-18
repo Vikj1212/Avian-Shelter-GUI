@@ -47,6 +47,28 @@ public class Shelter{
             while(numClients-- > 0){
                 clients.add(new Client(br));
             }
+            int numAdoptions = Integer.parseInt(br.readLine());
+            while(numAdoptions-- > 0){
+                String fam = br.readLine();
+                if(fam.equals(parrot)){ 
+                    Animal p = (new Parrot(br));
+                    int clientIndex = Integer.parseInt(br.readLine());
+                    adopt(p, clients.get(clientIndex));
+                }
+                else if(fam.equals(hawk)){ 
+                    Animal h = (new Hawk(br));
+                    int clientIndex = Integer.parseInt(br.readLine());
+                    adopt(h, clients.get(clientIndex));
+                }
+                else if(fam.equals(owl)){ 
+                    Animal o = (new Owl(br));
+                    int clientIndex = Integer.parseInt(br.readLine());
+                    adopt(o, clients.get(clientIndex));
+                    
+                }
+                else throw new IOException("Unable to read adoptions!");
+
+            }
         }catch(Exception e){System.err.println("Failed to read shelter data from file: " + e);}
     }
     public void addAnimal(Animal animal){
@@ -78,6 +100,7 @@ public class Shelter{
                 bw.write(a.family() + '\n');
                 a.save(bw);
                 int index = clients.indexOf(adoptions.get(a));
+                System.out.println("[Debug]: " + index);
                 if(index < 0 || index > clients.size()){
                 throw new ArrayIndexOutOfBoundsException("Adoptive Client Not Registered!");
                 }
