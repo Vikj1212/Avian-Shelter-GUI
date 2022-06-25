@@ -3,6 +3,7 @@ package shelter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.Iterator;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -100,11 +101,11 @@ public class Shelter{
                 bw.write(a.family() + '\n');
                 a.save(bw);
                 int index = clients.indexOf(adoptions.get(a));
-                System.out.println("[Debug]: " + index);
+                //System.out.println("[Debug]: " + index);
                 if(index < 0 || index > clients.size()){
                 throw new ArrayIndexOutOfBoundsException("Adoptive Client Not Registered!");
                 }
-                bw.write(index + '\n');
+                bw.write("" + clients.indexOf(adoptions.get(a)) + '\n');
             }
         }catch (Exception e){System.err.println("Failed to write shelter data to file: " + e);}
         bw.close();
@@ -126,6 +127,7 @@ public class Shelter{
         return result.toString();   
     }
     
+    public Object[] adopted(){return adoptions.keySet().toArray();} //getter for animals in adoptions
     public void adopt(Animal animal, Client client){
         adoptions.put(animal, client);
     }

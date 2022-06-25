@@ -8,8 +8,16 @@ import shelter.Parrotbreed;
 import shelter.Parrot;
 import shelter.Owl;
 import shelter.Owlbreed;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Set;
+
 import javax.swing.JFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -42,6 +50,7 @@ public class MainWin extends JFrame{
     private JLabel data;
     private File filename;
     private enum DataView{ANIMALS, CLIENTS, ADOPTIONS};
+    private boolean hasSaved = false;
     
     public MainWin(){
         super("Exotic Avian Shelter");
@@ -49,7 +58,19 @@ public class MainWin extends JFrame{
         data = new JLabel(shelter.toString());
         super.setLayout(new BorderLayout());
         super.add(data, BorderLayout.CENTER);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent we){
+                String buttons[] = {"Exit", "Go Back"};
+                int opt = JOptionPane.showOptionDialog(null, "Are you sure you want to exit?", "Exiting Shelter", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, buttons, buttons[1]);
+                System.out.println(opt);
+                if(opt == 0){
+                    System.exit(0);
+                }
+                System.out.println(opt);
+            }
+        });
         
         setSize(600,420);
         //setVisible(true);
@@ -136,6 +157,7 @@ public class MainWin extends JFrame{
         setVisible(true);
         
     }
+
     
     private <T extends Animal> void newAnimal(T animal, JComboBox breeds){
         JDialog newAnimalDialog = new JDialog();
@@ -195,6 +217,14 @@ public class MainWin extends JFrame{
         }
         updateDisplay(DataView.CLIENTS);
     }
+    public void removeAdopted(JComboBox a){
+        Object[] adoptedAnimals = shelter.adopted();
+        if(adoptedAnimals != null){
+            for(Object ani : adoptedAnimals){
+                a.removeItem(ani);
+            }
+        }
+    }
     public void onAdoptClick(){
         JDialog adopt = new JDialog();
         adopt.setSize(300, 300);
@@ -206,8 +236,10 @@ public class MainWin extends JFrame{
 //        for(int i = 0; i < shelter.animals.size(); i++){aniArray[i] = shelter.animals.get(i).toString();}
         JComboBox animals = new JComboBox();
         ListIterator<Animal> animalIt = shelter.animalListIterator();
+        Object[] adoptedAnimal = shelter.adopted();
         while(animalIt.hasNext()){
             animals.addItem(animalIt.next());
+            removeAdopted(animals);
         }
         JLabel client = new JLabel("<html><br/>Client</html>");
 //        String[] clientArray = new String[shelter.clients.size()];
@@ -280,6 +312,7 @@ public class MainWin extends JFrame{
     public void onSaveClick(){
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(shelter.getFilename())))) {
             shelter.save(bw);
+            hasSaved = true;
         }catch(Exception e){System.err.println("Failed to save to file: " + e);
             JOptionPane.showMessageDialog(this, e, "Failed to save to file!", JOptionPane.ERROR_MESSAGE);
             }
