@@ -31,6 +31,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import javax.swing.JDialog;
@@ -186,8 +188,9 @@ public class MainWin extends JFrame{
                     String pgender = String.valueOf(genders.getSelectedItem());
                     int umar = (int)ages.getValue();
                     animal.create(breeds.getSelectedItem(), names.getText(), Gender.valueOf(String.valueOf(genders.getSelectedItem())), umar);
+                    shelter.addAnimal(animal);
                 }
-                shelter.addAnimal(animal);
+                
                 updateDisplay(DataView.ANIMALS);
     }
     
@@ -202,19 +205,36 @@ public class MainWin extends JFrame{
     }
     public void onNewClientClick(){
         JDialog newClient = new JDialog();
-        newClient.setSize(220, 220);
+        newClient.setSize(500, 220);
+        //newClient.setLayout(new GridBagLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        GridBagLayout OlLayout = new GridBagLayout();
+        OlLayout.columnWidths = new int[]{100, 100, 100, 100};
+        OlLayout.rowHeights = new int[]{100, 100, 100, 100, 100};
+        newClient.setLayout(OlLayout);
+
         
         JLabel name = new JLabel("<HTML><br/>Name</HTML>");
         JTextField clientName = new JTextField(25);
+        GridBagConstraints name_Label = new GridBagConstraints();
+        name_Label.gridx = 0;
+        name_Label.gridy = 0;
+        name_Label.gridwidth = 1;
+        name_Label.gridheight = 1;
+        name_Label.anchor = GridBagConstraints.CENTER;
+        newClient.add(name, name_Label);
         JLabel number = new JLabel ("<HTML><br/>Phone #</HTML>");
         JTextField phNumber = new JTextField(15);
+        JLabel street = new JLabel("<HTML><br/>Street</HTML>");
+        JTextField clientStreet = new JTextField(30);
+        JLabel city = new JLabel("<HTML><br/>City</HTML>");
+        JTextField clientCity = new JTextField(15);
+        JLabel state = new JLabel("<HTML><br/>State</HTML>");
+        JTextField clientState = new JTextField(10);
         
-        Object[] objects = {name, clientName, number, phNumber};
-        int button = JOptionPane.showConfirmDialog(this, objects, "New Client", JOptionPane.OK_CANCEL_OPTION);
-        if(button == JOptionPane.OK_OPTION){
-            shelter.addClient(new Client(clientName.getText(), phNumber.getText()));
-        }
+
+        newClient.setVisible(true);
         updateDisplay(DataView.CLIENTS);
     }
     public void removeAdopted(JComboBox a){
