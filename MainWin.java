@@ -204,7 +204,7 @@ public class MainWin extends JFrame{
         newAnimal(new Owl(), new JComboBox(Owlbreed.values()));
     }
     public void onNewClientClick(){
-        JDialog newClient = new JDialog();
+        /*JDialog newClient = new JDialog(); //Trying to use GridBagLayout for more manual control
         newClient.setSize(500, 220);
         //newClient.setLayout(new GridBagLayout());
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -231,10 +231,31 @@ public class MainWin extends JFrame{
         JLabel city = new JLabel("<HTML><br/>City</HTML>");
         JTextField clientCity = new JTextField(15);
         JLabel state = new JLabel("<HTML><br/>State</HTML>");
-        JTextField clientState = new JTextField(10);
+        JTextField clientState = new JTextField(10);*/ //Trying to use GridBagLayout for more manual control
+        JDialog newClient = new JDialog();
+        newClient.setSize(220, 220);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        
+        JLabel name = new JLabel("<HTML><br/>Name</HTML>");
+        JTextField clientName = new JTextField(25);
+        JLabel number = new JLabel ("<HTML><br/>Phone #</HTML>");
+        JTextField phNumber = new JTextField(15);
+        JLabel street = new JLabel("<HTML><br/>Street</HTML>");
+        JTextField streetField = new JTextField(30);
+        JLabel city = new JLabel("<HTML><br/>City</HTML>");
+        JTextField cityField = new JTextField(15);
+        JLabel state = new JLabel("<HTML><br/>State</HTML>");
+        JTextField stateField = new JTextField(15);
+        
+        Object[] objects = {name, clientName, number, phNumber, street, streetField, city, cityField, state, stateField};
+        int button = JOptionPane.showConfirmDialog(this, objects, "New Client", JOptionPane.OK_CANCEL_OPTION);
+        if(button == JOptionPane.OK_OPTION){
+            shelter.addClient(new Client(clientName.getText(), phNumber.getText(), streetField.getText(), cityField.getText(), stateField.getText()));
+            newClient.setVisible(true);
+        }
         
 
-        newClient.setVisible(true);
+        
         updateDisplay(DataView.CLIENTS);
     }
     public void removeAdopted(JComboBox a){
